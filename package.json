@@ -1,0 +1,22 @@
+{
+  "name": "recipe-app",
+  "version": "1.0.0",
+  "description": "recipe webhook",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishalsrini/recipe-app.git"
+  },
+  "keywords": [
+    "receipe"
+  ],
+  "author": "Vishal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishalsrini/recipe-app/issues"
+  },
+  "homepage": "https://github.com/vishalsrini/recipe-app#readme"
+}
