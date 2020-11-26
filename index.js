@@ -24,7 +24,14 @@ app.get('/', (req, res) => {
 
 app.post('/getrecipe', (req, res) => {
     console.log(req.body);
-    const getRecipeUrl = encodeURI(`${spoonacular}/recipes/complexSearch/?apiKey=${apiKey}&cusine=indian&diet=vegetarian&includeIngredients=${req.body.result.parameters.ingredient}&number=2&limitLicense=true`);
+
+    let ingredients = '';
+    for(let ingredient of req.body.queryResult.parameters.ingredient) {
+        ingredients += ingredient + ",";
+    }
+    console.log('Ingredients used - ' , ingredients);
+    
+    const getRecipeUrl = encodeURI(`${spoonacular}/recipes/complexSearch/?apiKey=${apiKey}&cusine=indian&fillIngredients=true&diet=vegetarian&includeIngredients=${ingredients.slice(0,-1)}&number=2&limitLicense=true`);
     http.get(getRecipeUrl, responseFromApi => {
         let completeResponse = '';
         responseFromApi.on('data', chunk => {
@@ -42,12 +49,24 @@ app.post('/getrecipe', (req, res) => {
                 dataToSend = `We couldn't find the recipe using the ingredients you mentioned.`;
             }
 
-            dataToSend = `I think you can create ${recipe.results[0].title} using ${recipe.results[0].usedIngredientCount} ingredient that you mentioned. Want to know more on how to make that recipe?`
-
-            return res.json({
-                fulfillmentText: dataToSend,
-                source: 'getrecipe'
-            })
+            let finalListOfRecipes = '';
+            for(const [i, result] of recipe.results.entries()) {
+                console.log(i, result.usedIngredients.length, result.unusedIngredients.length);
+                var resultIngredient = '';
+                var ingredients = result.usedIngredients.concat(result.unusedIngredients);
+                for(const ingredient of ingredients) {
+                    resultIngredient += ingredient.name + ",";
+                }
+                console.log('Full ingredients ', resultIngredient.toString());
+                finalListOfRecipes += i+1 + '. ' + result.title + ' using following ingredients - ' + resultIngredient.slice(0,-1) + ' '
+                if(i == (recipe.results.length-1)) {
+                    dataToSend = `You can make following recipes - ${finalListOfRecipes}. Want to know more on how to make that recipe?`
+                    return res.json({
+                        fulfillmentText: dataToSend,
+                        source: 'getrecipe'
+                    })
+                }
+            }
         })
     }, error => {
         return res.json({
