@@ -60,7 +60,7 @@ app.post('/getrecipe', (req, res) => {
                 console.log('Full ingredients ', resultIngredient.toString());
                 finalListOfRecipes += i+1 + '. ' + result.title + ' using following ingredients - ' + resultIngredient.slice(0,-1) + ' \n '
                 if(i == (recipe.results.length-1)) {
-                    dataToSend = `You can make following recipes \n ${finalListOfRecipes}. Want to know more on how to make that recipe?`
+                    dataToSend = `You can make following recipes \n ${finalListOfRecipes}. Want to know more on how to make those recipes?`
                     return res.json({
                         fulfillmentText: dataToSend,
                         source: 'getrecipe'
