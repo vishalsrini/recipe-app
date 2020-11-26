@@ -15,6 +15,13 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(morgan('combined'));
 
+app.get('/', (req, res) => {
+    return res.status(200).json({
+        status: 200,
+        message: 'application working fine'
+    })
+})
+
 app.post('/getrecipe', (req, res) => {
     console.log(req.body);
     const getRecipeUrl = encodeURI(`${spoonacular}/recipes/complexSearch/?apiKey=${apiKey}&cusine=indian&diet=vegetarian&includeIngredients=${req.body.result.parameters.ingredient}&number=2&limitLicense=true`);
