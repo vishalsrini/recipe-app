@@ -53,14 +53,14 @@ app.post('/getrecipe', (req, res) => {
             for(const [i, result] of recipe.results.entries()) {
                 console.log(i, result.usedIngredients.length, result.unusedIngredients.length);
                 var resultIngredient = '';
-                var ingredients = result.usedIngredients.concat(result.unusedIngredients);
+                var ingredients = result.usedIngredients.concat(result.unusedIngredients).concat(result.missedIngredients);
                 for(const ingredient of ingredients) {
                     resultIngredient += ingredient.name + ",";
                 }
                 console.log('Full ingredients ', resultIngredient.toString());
-                finalListOfRecipes += i+1 + '. ' + result.title + ' using following ingredients - ' + resultIngredient.slice(0,-1) + ' '
+                finalListOfRecipes += i+1 + '. ' + result.title + ' using following ingredients - ' + resultIngredient.slice(0,-1) + ' \n '
                 if(i == (recipe.results.length-1)) {
-                    dataToSend = `You can make following recipes - ${finalListOfRecipes}. Want to know more on how to make that recipe?`
+                    dataToSend = `You can make following recipes \n ${finalListOfRecipes}. Want to know more on how to make that recipe?`
                     return res.json({
                         fulfillmentText: dataToSend,
                         source: 'getrecipe'
